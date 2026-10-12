@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <TransformComponent.h>
 
 namespace sf
 {
@@ -10,6 +11,9 @@ namespace sf
 class Entity
 {
 public:
+	std::string name;
+	TransformComponent transformComponent;
+
 	Entity(std::string friendlyName = "");
 	virtual ~Entity();
 

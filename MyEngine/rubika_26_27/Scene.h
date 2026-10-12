@@ -1,6 +1,8 @@
 #pragma once
 
 #include <string>
+#include <vector>
+#include <Entity.h>
 
 namespace sf
 {
@@ -10,6 +12,8 @@ namespace sf
 class Scene
 {
 public:
+	std::string sceneName;
+	std::vector<Entity*> entities;
 
 	Scene(const std::string& name);
 	~Scene();
@@ -17,6 +21,9 @@ public:
 	virtual void Start();
 	virtual void Update(float fDeltaTime);
 	virtual void Destroy();
+
+	Entity& AddEntity(Entity* entity);;
+	void RemoveEntity(Entity& entity);
 
 	/*
 	 * This function will be removed later, when the rendering system will be more robust. But for now, we need it here.
