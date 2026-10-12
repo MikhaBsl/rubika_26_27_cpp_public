@@ -15,4 +15,6 @@ public:
 
 	bool CheckNameCollision(const std::string& sceneName) const;
 
+	void DrawSceneView();
+
 };
