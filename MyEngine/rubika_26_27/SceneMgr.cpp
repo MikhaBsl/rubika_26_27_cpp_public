@@ -18,7 +18,7 @@ SceneMgr::~SceneMgr()
 
 Scene* SceneMgr::AddScene(Scene* scene)
 {
-	if (CheckNameCollision(scene->sceneName) || scene == nullptr)
+	if ( scene == nullptr || CheckNameCollision(scene->sceneName))
 		return nullptr;
 
 	auto it = scenes.emplace(scene->sceneName, scene);
@@ -28,6 +28,7 @@ Scene* SceneMgr::AddScene(Scene* scene)
 void SceneMgr::RemoveScene(const std::string& sceneName)
 {
 	auto it = scenes.find(sceneName);
+	if (currentScene == it->second) currentScene = nullptr;
 	if (it != scenes.end())
 	{
 		delete it->second;
@@ -65,14 +66,10 @@ void SceneMgr::DrawDebug()
 #ifdef _USE_IMGUI
 
 	if (currentScene != nullptr)
-	{
 		ImGui::Text("Active Scene: %s", currentScene->sceneName.c_str());
-	}
 	else
-	{
 		ImGui::Text("Active Scene: None");
-	}
-	
+
 	ImGui::Separator();
 
 	ImGui::InputTextWithHint("##NewSceneName", "New scene name", newSceneName, sizeof(newSceneName));
@@ -89,17 +86,21 @@ void SceneMgr::DrawDebug()
 	if (ImGui::Button("Remove Scene"))
 	{
 		if (!selectedSceneName.empty())
+		{
 			RemoveScene(selectedSceneName);
+			selectedSceneName.clear();
+		}
 	}
 	ImGui::SameLine();
 	if (ImGui::Button("Change Scene"))
 	{
-		if(!selectedSceneName.empty()) 
+		if (!selectedSceneName.empty())
 			ChangeScene(selectedSceneName);
 	}
 
 	ImGui::Separator();
 
+	// Détail de la scène sélectionnée
 	auto it = scenes.find(selectedSceneName);
 	if (it != scenes.end())
 	{
@@ -110,7 +111,6 @@ void SceneMgr::DrawDebug()
 
 		ImGui::InputTextWithHint("##NewEntityName", "Entity name", newEntityName, sizeof(newEntityName));
 		ImGui::SameLine();
-
 		if (ImGui::Button("Add Entity"))
 		{
 			scene->AddEntity(new Entity(newEntityName[0] != '\0' ? newEntityName : "Entity"));
@@ -126,7 +126,6 @@ void SceneMgr::DrawDebug()
 
 			if (ImGui::TreeNode(entity, "%s", entity->name.c_str()))
 			{
-				//ImGui::Text("Address: %p", (void*)entity);
 				if (ImGui::Button("Remove Entity"))
 					entityToRemove = entity;
 				ImGui::TreePop();
@@ -143,15 +142,16 @@ void SceneMgr::DrawDebug()
 
 	ImGui::Separator();
 
+	// Liste des scènes
+	ImGui::Text("List of Scenes :");
+
 	for (auto& [name, scene] : scenes)
 	{
 		bool isActive = (scene == currentScene);
 		std::string label = isActive ? name + " (active)" : name;
 
 		if (ImGui::Selectable(label.c_str(), selectedSceneName == name))
-		{
 			selectedSceneName = name;
-		}
 	}
-	#endif
+#endif
 }
