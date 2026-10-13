@@ -22,7 +22,7 @@ public:
 	virtual void Update(float fDeltaTime);
 	virtual void Destroy();
 
-	Entity& AddEntity(Entity* entity);;
+	Entity& AddEntity(Entity* entity);
 	void RemoveEntity(Entity& entity);
 
 	/*

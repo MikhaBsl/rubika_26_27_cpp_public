@@ -1,20 +1,27 @@
 #pragma once
 #include <map>
 #include <Scene.h>
+#include <DebugMgr.h>
 
-class SceneMgr
+class SceneMgr : public IDebugable
 {
 public:
 	std::map<std::string, Scene*> scenes;
 	Scene* currentScene;
+	std::string selectedSceneName;
+	char newSceneName[64] = "";
+
+	SceneMgr();
 	~SceneMgr();
 
-	Scene AddScene(Scene& scene);
+	Scene* AddScene(Scene* scene);
 	void RemoveScene(const std::string& sceneName);
 	void ChangeScene(const std::string& sceneName);
 
 	bool CheckNameCollision(const std::string& sceneName) const;
 
-	void DrawSceneView();
+	void Init();
+	void Shut();
 
+	virtual void DrawDebug() override;
 };

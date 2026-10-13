@@ -1,6 +1,12 @@
 #include "SceneMgr.h"
 #include "stdexcept"
 #include <Imgui/imgui.h>
+#include <Globals.h>
+
+SceneMgr::SceneMgr()
+{
+	currentScene = nullptr;
+}
 
 SceneMgr::~SceneMgr()
 {
@@ -10,15 +16,13 @@ SceneMgr::~SceneMgr()
 	}
 }
 
-Scene SceneMgr::AddScene(Scene& scene)
+Scene* SceneMgr::AddScene(Scene* scene)
 {
-	if (CheckNameCollision(scene.sceneName)) 
-		throw std::runtime_error("Erreur : Une scene avec ce nom existe deja.");
+	if (CheckNameCollision(scene->sceneName) || scene == nullptr)
+		return nullptr;
 
-	Scene* newScene = new Scene(scene);
-
-	auto it = scenes.emplace(scene.sceneName, newScene);
-	return *(it.first->second);
+	auto it = scenes.emplace(scene->sceneName, scene);
+	return it.first->second;
 }
 
 void SceneMgr::RemoveScene(const std::string& sceneName)
@@ -46,10 +50,19 @@ bool SceneMgr::CheckNameCollision(const std::string& sceneName) const
 	return scenes.contains(sceneName);
 }
 
-void SceneMgr::DrawSceneView()
+void SceneMgr::Init()
+{
+	gData.DebugMgr->RegisterDebugableWindow("Scene Manager", this);
+}
+
+void SceneMgr::Shut()
+{
+	gData.DebugMgr->UnregisterDebugableWindow("Scene Manager");
+}
+
+void SceneMgr::DrawDebug()
 {
 #ifdef _USE_IMGUI
-	ImGui::Begin("Scene Manager");
 
 	if (currentScene != nullptr)
 	{
@@ -62,19 +75,40 @@ void SceneMgr::DrawSceneView()
 
 	ImGui::Separator();
 
+	for (auto& [name, scene] : scenes)
+	{
+		bool isActive = (scene == currentScene);
+		std::string label = isActive ? name + " (active)" : name;
+
+		if (ImGui::Selectable(label.c_str(), selectedSceneName == name))
+		{
+			selectedSceneName = name;
+		}
+	}
+	
+	ImGui::Separator();
+
+	ImGui::InputTextWithHint("##NewSceneName", "Scene name", newSceneName, sizeof(newSceneName));
+
 	if (ImGui::Button("Add Scene"))
 	{
-
+		if (newSceneName[0] != '\0' && !CheckNameCollision(newSceneName))
+		{
+			AddScene(new Scene(newSceneName));
+			newSceneName[0] = '\0';
+		}
 	}
 	ImGui::SameLine();
 	if (ImGui::Button("Remove Scene"))
 	{
-
+		if (!selectedSceneName.empty())
+			RemoveScene(selectedSceneName);
 	}
 	ImGui::SameLine();
 	if (ImGui::Button("Change Scene"))
 	{
-
+		if(!selectedSceneName.empty()) 
+			ChangeScene(selectedSceneName);
 	}
 	#endif
 }
