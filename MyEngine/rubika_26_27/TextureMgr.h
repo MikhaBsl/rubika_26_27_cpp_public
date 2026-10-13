@@ -4,6 +4,8 @@
 
 #include <filesystem>
 #include <string>
+#include <DebugMgr.h>
+#include <map>
 
 struct AnimationData
 {
@@ -41,11 +43,17 @@ struct TextureData
 	friend class TextureMgr;
 };
 
-class TextureMgr final
+class TextureMgr final : public IDebugable
 {
 public:
 	void Init();
 	void Shut();
+
+	TextureMgr();
+	~TextureMgr();
+
+	std::map<std::string, TextureData> textures;
+	TextureData defaultTexture;
 
 	/*
 	 * Loads the texture using the given path, including its metadata.
@@ -59,4 +67,9 @@ public:
 	 * Returns the corresponding TextureData using the name of the texture. Returns the default TextureData in case of an unknown name
 	 */
 	const TextureData& GetTextureData(const std::string& name) const;
+	
+
+	// Hérité via IDebugable
+	void DrawDebug() override;
+
 };
