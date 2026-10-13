@@ -10,6 +10,7 @@ Globals::Globals() : FrameCount(0)
 	DebugMgr = new ::DebugMgr();
 	Logger = new ::Logger();
 	SceneMgr = new::SceneMgr();
+	TextureMgr = new::TextureMgr();
 }
 
 Globals::~Globals()

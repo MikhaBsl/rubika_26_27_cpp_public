@@ -55,13 +55,17 @@ public:
 	std::map<std::string, TextureData> textures;
 	TextureData defaultTexture;
 
+	int LoadFolder(const std::filesystem::path& folder);
+
+	bool LoadTexture(const std::filesystem::path& path);
+
 	/*
 	 * Loads the texture using the given path, including its metadata.
 	 * Obviously, this function will also store the loaded data
 	 * If errors occur during the loading process, this function must return false.
 	 * Return true otherwise.
 	*/
-	bool LoadTexture(const std::filesystem::path& path);
+
 
 	/*
 	 * Returns the corresponding TextureData using the name of the texture. Returns the default TextureData in case of an unknown name
@@ -72,4 +76,11 @@ public:
 	// Hérité via IDebugable
 	void DrawDebug() override;
 
+private:
+	char rootFolder[256] = "Ressources";
+
+	bool CheckFilesExist(const std::filesystem::path& texturePath,
+		const std::filesystem::path& metadataPath) const;
+
+	bool LoadImageFile(const std::filesystem::path& path, TextureData& data);
 };
