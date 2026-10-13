@@ -1,4 +1,5 @@
 #include <Scene.h>
+#include <algorithm>
 
 
 Scene::Scene(const std::string& name)
@@ -37,6 +38,7 @@ Entity& Scene::AddEntity(Entity* entity)
 void Scene::RemoveEntity(Entity& entity)
 {
 	entities.erase(std::remove(entities.begin(), entities.end(), &entity), entities.end());
+	delete& entity;
 }
 
 

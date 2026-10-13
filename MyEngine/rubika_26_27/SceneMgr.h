@@ -10,6 +10,7 @@ public:
 	Scene* currentScene;
 	std::string selectedSceneName;
 	char newSceneName[64] = "";
+	char newEntityName[64] = "";
 
 	SceneMgr();
 	~SceneMgr();
