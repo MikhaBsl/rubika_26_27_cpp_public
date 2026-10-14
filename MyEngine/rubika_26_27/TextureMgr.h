@@ -88,7 +88,7 @@ public:
 	void DrawDebug() override;
 
 private:
-	char rootFolder[256] = "Ressources";
+	char rootFolder[256] = R"(D:\Rubika\Cours\CPP Natif\rubika_26_27_cpp_public\MyEngine\Ressources)";
 
 	bool CheckFilesExist(const std::filesystem::path& texturePath,
 		const std::filesystem::path& metadataPath) const;

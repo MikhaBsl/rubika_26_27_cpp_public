@@ -238,9 +238,12 @@ static void DrawTextureNode(const std::string& name, const TextureData& data)
 
 	if (size.x > 0)
 	{
-		float width = 128.f;
+		float maxWidth = ImGui::GetContentRegionAvail().x;
+		float width = std::min(static_cast<float>(size.x), maxWidth);
 		float height = width * size.y / size.x;
+
 		ImGui::Image(data.Texture, sf::Vector2f(width, height));
+
 	}
 
 	if (data.Type == eTextureType::Animations)

@@ -2,6 +2,7 @@
 
 #include <string>
 #include <TransformComponent.h>
+#include <RenderComponent.h>
 
 namespace sf
 {
@@ -13,6 +14,7 @@ class Entity
 public:
 	std::string name;
 	TransformComponent transformComponent;
+	RenderComponent renderComponent;
 
 	Entity(std::string friendlyName = "");
 	virtual ~Entity();
