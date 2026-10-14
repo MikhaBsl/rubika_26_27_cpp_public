@@ -31,6 +31,13 @@ struct StaticTileData
 	bool IsRevertedY = false;
 };
 
+enum class eTextureType
+{
+	Unknown,
+	Animations,
+	Backgrounds
+};
+
 struct TextureData
 {
 	TextureData();
@@ -40,8 +47,14 @@ struct TextureData
 	// Container of AnimationData AnimationsData;
 	// Container of StaticTileData StaticTilesData;
 
+	std::map<std::string, AnimationData> AnimationsData;
+	std::map<std::string, StaticTileData> StaticTilesData;
+
 	friend class TextureMgr;
+
+	eTextureType Type = eTextureType::Unknown;
 };
+
 
 class TextureMgr final : public IDebugable
 {
@@ -57,7 +70,6 @@ public:
 
 	int LoadFolder(const std::filesystem::path& folder);
 
-	bool LoadTexture(const std::filesystem::path& path);
 
 	/*
 	 * Loads the texture using the given path, including its metadata.
@@ -66,14 +78,13 @@ public:
 	 * Return true otherwise.
 	*/
 
+	bool LoadTexture(const std::filesystem::path& path);
 
 	/*
 	 * Returns the corresponding TextureData using the name of the texture. Returns the default TextureData in case of an unknown name
 	 */
 	const TextureData& GetTextureData(const std::string& name) const;
-	
 
-	// Hérité via IDebugable
 	void DrawDebug() override;
 
 private:
@@ -83,4 +94,7 @@ private:
 		const std::filesystem::path& metadataPath) const;
 
 	bool LoadImageFile(const std::filesystem::path& path, TextureData& data);
+
+	bool LoadMetadata(const std::filesystem::path& metadataPath, TextureData& data);
+
 };

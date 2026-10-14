@@ -4,11 +4,85 @@
 #include <Imgui/imgui.h>
 #include <Imgui/imgui-SFML.h>
 #include <rapidxml/rapidxml_utils.hpp>
+#include <cstdlib>
+
+static int ReadInt(rapidxml::xml_node<>* parent, const char* childName)
+{
+	rapidxml::xml_node<>* node = parent->first_node(childName);
+	if (node == nullptr)
+	{
+		Logger::Warning(std::string("Missing node: ") + childName);
+		return 0;
+	}
+	return std::atoi(node->value());
+}
+
+static void ParseAnimations(rapidxml::xml_node<>* root, TextureData& data)
+{
+	for (auto* node = root->first_node("Animation"); node != nullptr; node = node->next_sibling("Animation"))
+	{
+		rapidxml::xml_attribute<>* nameAttr = node->first_attribute("Name");
+		if (nameAttr == nullptr)
+		{
+			Logger::Warning("Animation without Name, skipped");
+			continue;
+		}
+
+		const std::string name = nameAttr->value();
+		if (data.AnimationsData.contains(name))
+		{
+			Logger::Warning("Duplicate animation name: " + name);
+			continue;
+		}
+
+		AnimationData anim;
+		anim.StartX = ReadInt(node, "X");
+		anim.StartY = ReadInt(node, "Y");
+		anim.SizeX = ReadInt(node, "SizeX");
+		anim.SizeY = ReadInt(node, "SizeY");
+		anim.OffsetX = ReadInt(node, "OffsetX");
+		anim.OffsetY = ReadInt(node, "OffsetY");
+		anim.AnimationSpriteCount = ReadInt(node, "SpriteNum");
+		anim.SpriteOnLine = ReadInt(node, "SpritesOnLine");
+		anim.IsReverted = ReadInt(node, "Reverted") != 0;
+
+		data.AnimationsData[name] = anim;
+	}
+}
+
+static void ParseTiles(rapidxml::xml_node<>* root, TextureData& data)
+{
+	for (auto* node = root->first_node("Tile"); node != nullptr; node = node->next_sibling("Tile"))
+	{
+		rapidxml::xml_attribute<>* nameAttr = node->first_attribute("Name");
+		if (nameAttr == nullptr)
+		{
+			Logger::Warning("Tile without Name, skipped");
+			continue;
+		}
+
+		const std::string name = nameAttr->value();
+		if (data.StaticTilesData.contains(name))
+		{
+			Logger::Warning("Duplicate tile name: " + name);
+			continue;
+		}
+
+		StaticTileData tile;
+		tile.StartX = ReadInt(node, "X");
+		tile.StartY = ReadInt(node, "Y");
+		tile.SizeX = ReadInt(node, "SizeX");
+		tile.SizeY = ReadInt(node, "SizeY");
+		tile.IsRevertedX = ReadInt(node, "RevertedX") != 0;
+		tile.IsRevertedY = ReadInt(node, "RevertedY") != 0;
+
+		data.StaticTilesData[name] = tile;
+	}
+}
 
 void TextureMgr::Init()
 {
 	gData.DebugMgr->RegisterDebugableWindow("Texture Manager", this);
-
 }
 
 void TextureMgr::Shut()
@@ -49,6 +123,13 @@ int TextureMgr::LoadFolder(const std::filesystem::path& folder)
 
 bool TextureMgr::LoadTexture(const std::filesystem::path& path)
 {
+	const std::string name = path.stem().string();
+	if (textures.contains(name))
+	{
+		Logger::Warning("Texture already loaded: " + name);
+		return true;
+	}
+
 	std::filesystem::path metadataPath = path;
 	metadataPath.replace_extension(".xml");
 
@@ -59,7 +140,10 @@ bool TextureMgr::LoadTexture(const std::filesystem::path& path)
 	if (!LoadImageFile(path, data))
 		return false;
 
-	textures[path.stem().string()] = std::move(data);
+	if (!LoadMetadata(metadataPath, data))
+		return false;
+
+	textures[name] = std::move(data);
 	return true;
 }
 
@@ -75,41 +159,54 @@ bool TextureMgr::LoadImageFile(const std::filesystem::path& path, TextureData& d
 	return true;
 }
 
+bool TextureMgr::LoadMetadata(const std::filesystem::path& metadataPath, TextureData& data)
+{
+	try
+	{
+		rapidxml::file<> file(metadataPath.string().c_str());
+		rapidxml::xml_document<> doc;
+		doc.parse<0>(file.data());
+
+		rapidxml::xml_node<>* root = doc.first_node();
+		if (root == nullptr)
+		{
+			Logger::Error("Metadata file has no root node: " + metadataPath.string());
+			return false;
+		}
+
+		const std::string rootName = root->name();
+		if (rootName == "Animations")
+		{
+			data.Type = eTextureType::Animations;
+			ParseAnimations(root, data);
+			Logger::Info("Animations parsed: " + std::to_string(data.AnimationsData.size()));
+		}
+		else if (rootName == "Backgrounds")
+		{
+			data.Type = eTextureType::Backgrounds;
+			ParseTiles(root, data);
+			Logger::Info("Tiles parsed: " + std::to_string(data.StaticTilesData.size()));
+		}
+		else
+		{
+			Logger::Error("Unknown root node '" + rootName + "' in " + metadataPath.string());
+			return false;
+		}
+
+		return true;
+	}
+	catch (const std::exception& e)
+	{
+		Logger::Error("Failed to parse " + metadataPath.string() + ": " + e.what());
+		return false;
+	}
+}
+
 const TextureData& TextureMgr::GetTextureData(const std::string& name) const
 {
 	auto it = textures.find(name);
 	if (it == textures.end()) return defaultTexture;
 	return it->second;
-}
-
-void TextureMgr::DrawDebug()
-{
-#ifdef _USE_IMGUI
-	ImGui::InputText("Root folder", rootFolder, sizeof(rootFolder));
-	ImGui::SameLine();
-	if (ImGui::Button("Load folder"))
-		LoadFolder(rootFolder);
-
-	ImGui::Text("Loaded textures: %zu", textures.size());
-	ImGui::Separator();
-
-	for (auto& [name, data] : textures)
-	{
-		if (ImGui::TreeNode(name.c_str()))
-		{
-			sf::Vector2u size = data.Texture.getSize();
-			ImGui::Text("Size: %u x %u", size.x, size.y);
-
-			if (size.x > 0)
-			{
-				float width = 128.f;
-				float height = width * size.y / size.x;
-				ImGui::Image(data.Texture, sf::Vector2f(width, height));
-			}
-			ImGui::TreePop();
-		}
-	}
-#endif
 }
 
 bool TextureMgr::CheckFilesExist(const std::filesystem::path& texturePath,
@@ -128,6 +225,73 @@ bool TextureMgr::CheckFilesExist(const std::filesystem::path& texturePath,
 	}
 
 	return true;
+}
+
+#ifdef _USE_IMGUI
+static void DrawTextureNode(const std::string& name, const TextureData& data)
+{
+	if (!ImGui::TreeNode(name.c_str()))
+		return;
+
+	sf::Vector2u size = data.Texture.getSize();
+	ImGui::Text("Size: %u x %u", size.x, size.y);
+
+	if (size.x > 0)
+	{
+		float width = 128.f;
+		float height = width * size.y / size.x;
+		ImGui::Image(data.Texture, sf::Vector2f(width, height));
+	}
+
+	if (data.Type == eTextureType::Animations)
+	{
+		ImGui::Text("Animations: %zu", data.AnimationsData.size());
+		for (const auto& [animName, anim] : data.AnimationsData)
+			ImGui::BulletText("%s (%dx%d, %d sprites)", animName.c_str(), anim.SizeX, anim.SizeY, anim.AnimationSpriteCount);
+	}
+	else if (data.Type == eTextureType::Backgrounds)
+	{
+		ImGui::Text("Tiles: %zu", data.StaticTilesData.size());
+		for (const auto& [tileName, tile] : data.StaticTilesData)
+			ImGui::BulletText("%s (%dx%d)", tileName.c_str(), tile.SizeX, tile.SizeY);
+	}
+
+	ImGui::TreePop();
+}
+#endif
+
+void TextureMgr::DrawDebug()
+{
+#ifdef _USE_IMGUI
+	ImGui::InputText("Root folder", rootFolder, sizeof(rootFolder));
+	ImGui::SameLine();
+	if (ImGui::Button("Load folder"))
+		LoadFolder(rootFolder);
+
+	ImGui::Text("Loaded textures: %zu", textures.size());
+	ImGui::Separator();
+
+	if (ImGui::BeginTabBar("TextureTabs"))
+	{
+		if (ImGui::BeginTabItem("Animations"))
+		{
+			for (const auto& [name, data] : textures)
+				if (data.Type == eTextureType::Animations)
+					DrawTextureNode(name, data);
+			ImGui::EndTabItem();
+		}
+
+		if (ImGui::BeginTabItem("Backgrounds"))
+		{
+			for (const auto& [name, data] : textures)
+				if (data.Type == eTextureType::Backgrounds)
+					DrawTextureNode(name, data);
+			ImGui::EndTabItem();
+		}
+
+		ImGui::EndTabBar();
+	}
+#endif
 }
 
 TextureData::TextureData()
