@@ -126,8 +126,18 @@ void SceneMgr::DrawDebug()
 
 			if (ImGui::TreeNode(entity, "%s", entity->name.c_str()))
 			{
+				ImGui::BulletText("TransformComponent : ");
+
+				sf::Vector2f pos = entity->transformComponent.GetWorldPosition();
+				sf::Vector2f scale = entity->transformComponent.GetScale();
+				ImGui::Text("Position: %.1f, %.1f", pos.x, pos.y);
+				ImGui::Text("Scale: %.1f, %.1f", scale.x, scale.y);
+
+				ImGui::BulletText("RendererComponent : ");
+
 				if (ImGui::Button("Remove Entity"))
 					entityToRemove = entity;
+
 				ImGui::TreePop();
 			}
 		}

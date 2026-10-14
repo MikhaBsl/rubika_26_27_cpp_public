@@ -1,6 +1,6 @@
 #include "Entity.h"
 
-Entity::Entity(std::string friendlyName) : transformComponent(*this), renderComponent()
+Entity::Entity(std::string friendlyName) : transformComponent(*this), renderComponent(*this)
 {
 	name = friendlyName;
 }

@@ -1,13 +1,23 @@
 #pragma once
-#include <IDrawable.h>
+#include <IComponent.h>
+#include <memory>
+#include <SFML/Graphics/RenderWindow.hpp>
 
-class RenderComponent : IDrawable
+class IDrawable;
+
+class RenderComponent : public IComponent
 {
 public:
-	RenderComponent();
+	RenderComponent(Entity& parent);
 	~RenderComponent();
 
 	void Start() override;
 	void Update(float fDeltaTime) override;
-	void Destroy(float deltaTime) override;
+	void Destroy() override;
+
+	void SetDrawable(std::unique_ptr<IDrawable> drawable);
+	void Draw(sf::RenderWindow& window) const;
+
+private:
+	std::unique_ptr<IDrawable> Drawable;
 };

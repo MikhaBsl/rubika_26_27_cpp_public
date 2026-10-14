@@ -1,6 +1,7 @@
 #include "RenderComponent.h"
+#include <IDrawable.h>
 
-RenderComponent::RenderComponent()
+RenderComponent::RenderComponent(Entity& parent) : IComponent(parent)
 {
 }
 
@@ -16,6 +17,17 @@ void RenderComponent::Update(float fDeltaTime)
 {
 }
 
-void RenderComponent::Destroy(float deltaTime)
+void RenderComponent::Destroy()
 {
+}
+
+void RenderComponent::SetDrawable(std::unique_ptr<IDrawable> drawable)
+{
+	Drawable = std::move(drawable);
+}
+
+void RenderComponent::Draw(sf::RenderWindow& window) const
+{
+	if (Drawable)
+		Drawable->Draw(window);
 }
