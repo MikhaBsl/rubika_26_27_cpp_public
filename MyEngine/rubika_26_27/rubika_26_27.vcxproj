@@ -244,6 +244,7 @@
     <ClInclude Include="..\Dependencies\include\rapidxml\rapidxml_utils.hpp" />
     <ClInclude Include="DebugMgr.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="Entity.hxx" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="IComponent.h" />
     <ClInclude Include="IDrawable.h" />

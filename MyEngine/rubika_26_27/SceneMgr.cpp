@@ -2,6 +2,8 @@
 #include "stdexcept"
 #include <Imgui/imgui.h>
 #include <Globals.h>
+#include <TransformComponent.h>
+#include <RenderComponent.h>
 
 SceneMgr::SceneMgr()
 {
@@ -129,14 +131,19 @@ void SceneMgr::DrawDebug()
 
 			if (ImGui::TreeNode(entity, "%s", entity->name.c_str()))
 			{
-				ImGui::BulletText("TransformComponent : ");
+				TransformComponent* transform = entity->GetComponent<TransformComponent>();
+				if (transform != nullptr)
+				{
+					sf::Vector2f pos = transform->GetWorldPosition();
+					sf::Vector2f scale = transform->GetScale();
+					ImGui::Text("Position: %.1f, %.1f", pos.x, pos.y);
+					ImGui::Text("Scale: %.1f, %.1f", scale.x, scale.y);
+				}
+				else
+					ImGui::TextDisabled("No TransformComponent");
 
-				sf::Vector2f pos = entity->transformComponent.GetWorldPosition();
-				sf::Vector2f scale = entity->transformComponent.GetScale();
-				ImGui::Text("Position: %.1f, %.1f", pos.x, pos.y);
-				ImGui::Text("Scale: %.1f, %.1f", scale.x, scale.y);
-
-				ImGui::BulletText("RendererComponent : ");
+				if (entity->GetComponent<RenderComponent>() != nullptr)
+					ImGui::BulletText("RenderComponent");
 
 				if (ImGui::Button("Remove Entity"))
 					entityToRemove = entity;

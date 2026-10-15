@@ -1,9 +1,8 @@
 #pragma once
 
 #include <string>
-#include <TransformComponent.h>
-#include <RenderComponent.h>
-#include <RectangleRenderer.h>
+#include <IComponent.h>
+#include <vector>
 #include <memory>
 
 namespace sf
@@ -15,8 +14,6 @@ class Entity
 {
 public:
 	std::string name;
-	TransformComponent transformComponent;
-	RenderComponent renderComponent;
 
 	Entity(std::string friendlyName = "");
 	virtual ~Entity();
@@ -30,4 +27,16 @@ public:
 	 * Function that will be called each frame to draw the entity
 	*/
 	void Draw(sf::RenderWindow& window) const;
+
+	template <typename C>
+	C* AddComponent();
+
+	template <typename C>
+	C* GetComponent() const;
+
+private:
+
+	std::vector<std::unique_ptr<IComponent>> components;
 };
+
+#include "Entity.hxx"
