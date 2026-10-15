@@ -44,6 +44,7 @@ void SceneMgr::ChangeScene(const std::string& sceneName)
 		return;
 	}
 	currentScene = it->second;
+	currentScene->Start();
 }
 
 bool SceneMgr::CheckNameCollision(const std::string& sceneName) const
@@ -164,4 +165,16 @@ void SceneMgr::DrawDebug()
 			selectedSceneName = name;
 	}
 #endif
+}
+
+void SceneMgr::Update(float deltaTime)
+{
+	if (currentScene != nullptr)
+		currentScene->Update(deltaTime);
+}
+
+void SceneMgr::Draw(sf::RenderWindow window) const
+{
+	if (currentScene != nullptr)
+		currentScene->Draw(window);
 }

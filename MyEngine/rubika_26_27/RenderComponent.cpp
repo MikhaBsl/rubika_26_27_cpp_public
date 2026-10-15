@@ -11,14 +11,20 @@ RenderComponent::~RenderComponent()
 
 void RenderComponent::Start()
 {
+	if (Drawable)
+		Drawable->Start();
 }
 
 void RenderComponent::Update(float fDeltaTime)
 {
+	if (Drawable)
+		Drawable->Update(fDeltaTime);
 }
 
 void RenderComponent::Destroy()
 {
+	if (Drawable)
+		Drawable->Destroy(0.f);
 }
 
 void RenderComponent::SetDrawable(std::unique_ptr<IDrawable> drawable)

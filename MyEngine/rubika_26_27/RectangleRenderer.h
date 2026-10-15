@@ -1,6 +1,7 @@
 #pragma once
 #include <IDrawable.h>
 #include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/Color.hpp>
 
 class RectangleRenderer : public IDrawable
 {
@@ -15,6 +16,6 @@ public:
 	void Update(float deltaTime) override;
 	void Destroy(float deltaTime) override;
 
-	void SetSize();
-	void SetFillColor();
+	void SetSize(const sf::Vector2f& size);
+	void SetFillColor(const sf::Color& color);
 };

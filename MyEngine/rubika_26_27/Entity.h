@@ -3,6 +3,8 @@
 #include <string>
 #include <TransformComponent.h>
 #include <RenderComponent.h>
+#include <RectangleRenderer.h>
+#include <memory>
 
 namespace sf
 {
