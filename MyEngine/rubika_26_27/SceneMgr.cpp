@@ -131,16 +131,40 @@ void SceneMgr::DrawDebug()
 
 			if (ImGui::TreeNode(entity, "%s", entity->name.c_str()))
 			{
-				TransformComponent* transform = entity->GetComponent<TransformComponent>();
-				if (transform != nullptr)
+				if (ImGui::Button("Add Component"))
+					ImGui::OpenPopup("AddComponentPopup");
+
+				if (ImGui::BeginPopup("AddComponentPopup"))
 				{
-					sf::Vector2f pos = transform->GetWorldPosition();
-					sf::Vector2f scale = transform->GetScale();
-					ImGui::Text("Position: %.1f, %.1f", pos.x, pos.y);
-					ImGui::Text("Scale: %.1f, %.1f", scale.x, scale.y);
+					if (ImGui::MenuItem("TransformComponent"))
+						entity->AddComponent<TransformComponent>();
+
+					if (ImGui::MenuItem("RenderComponent"))
+						entity->AddComponent<RenderComponent>();
+
+					ImGui::EndPopup();
 				}
-				else
-					ImGui::TextDisabled("No TransformComponent");
+
+				if (entity->GetComponent<TransformComponent>() != nullptr)
+					ImGui::BulletText("TransformComponent");
+
+				TransformComponent* transform = entity->GetComponent<TransformComponent>();
+				if (transform != nullptr && ImGui::TreeNode("Transform"))
+				{
+					float pos[2] = { transform->GetWorldPosition().x, transform->GetWorldPosition().y };
+					if (ImGui::DragFloat2("Position", pos))
+						transform->SetWorldPosition(sf::Vector2f(pos[0], pos[1]));
+
+					float rotation = transform->GetRotation();
+					if (ImGui::DragFloat("Rotation", &rotation))
+						transform->SetRotation(rotation);
+
+					float scale[2] = { transform->GetScale().x, transform->GetScale().y };
+					if (ImGui::DragFloat2("Scale", scale, 0.05f))
+						transform->SetScale(sf::Vector2f(scale[0], scale[1]));
+
+					ImGui::TreePop();
+				}
 
 				if (entity->GetComponent<RenderComponent>() != nullptr)
 					ImGui::BulletText("RenderComponent");

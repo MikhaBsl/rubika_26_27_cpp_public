@@ -24,7 +24,7 @@ C* Entity::AddComponent()
 	
 	if (GetComponent<C>() != nullptr)
 	{
-		Logger::Warning(std::string("Component already present : " + typeid(C).name()));
+		Logger::Warning(std::string("Component already present : ") + typeid(C).name());
 		return nullptr;
 	}
 
