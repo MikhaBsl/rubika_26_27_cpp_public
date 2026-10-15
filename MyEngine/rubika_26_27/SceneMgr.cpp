@@ -12,6 +12,7 @@ SceneMgr::~SceneMgr()
 {
 	for (auto& pair : scenes)
 	{
+		pair.second->Destroy();
 		delete pair.second;
 	}
 }
@@ -31,6 +32,7 @@ void SceneMgr::RemoveScene(const std::string& sceneName)
 	if (currentScene == it->second) currentScene = nullptr;
 	if (it != scenes.end())
 	{
+		it->second->Destroy();
 		delete it->second;
 		scenes.erase(it);
 	}
@@ -173,7 +175,7 @@ void SceneMgr::Update(float deltaTime)
 		currentScene->Update(deltaTime);
 }
 
-void SceneMgr::Draw(sf::RenderWindow window) const
+void SceneMgr::Draw(sf::RenderWindow& window) const
 {
 	if (currentScene != nullptr)
 		currentScene->Draw(window);

@@ -6,6 +6,8 @@
 #include <Profiler.h>
 #include <Logger.h>
 #include <DebugMgr.h>
+#include <Scene.h>
+#include <Entity.h>
 
 int main()
 {
@@ -21,6 +23,14 @@ int main()
 
     sf::Clock clock;
     clock.restart();
+
+    // Création en dur de la scene avec un rectangle 
+
+    Scene* scene = new Scene("Main Scene");
+    scene->AddEntity(new Entity("Rect Entity"));
+
+    gData.SceneMgr->AddScene(scene);
+    gData.SceneMgr->ChangeScene("Main Scene");
 
     while (window.isOpen())
     {
@@ -59,10 +69,14 @@ int main()
         //Logger::DrawLogger();
         gData.DebugMgr->Draw();
 
+        gData.SceneMgr->Update(fDeltaTimeS);
+
         PROFILER_EVENT_END();
 
         PROFILER_EVENT_BEGIN(PROFILER_COLOR_GREEN, "Draw");
         window.clear();
+
+        gData.SceneMgr->Draw(window);
 
 #ifdef _USE_IMGUI
         ImGui::SFML::Render(window);

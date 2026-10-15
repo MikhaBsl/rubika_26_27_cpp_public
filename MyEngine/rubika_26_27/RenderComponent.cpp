@@ -24,7 +24,7 @@ void RenderComponent::Update(float fDeltaTime)
 void RenderComponent::Destroy()
 {
 	if (Drawable)
-		Drawable->Destroy(0.f);
+		Drawable->Destroy();
 }
 
 void RenderComponent::SetDrawable(std::unique_ptr<IDrawable> drawable)

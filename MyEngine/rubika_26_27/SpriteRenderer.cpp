@@ -17,7 +17,7 @@ void SpriteRenderer::Update(float deltaTime)
 {
 }
 
-void SpriteRenderer::Destroy(float deltaTime)
+void SpriteRenderer::Destroy()
 {
 }
 

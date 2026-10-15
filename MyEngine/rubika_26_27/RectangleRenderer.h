@@ -14,7 +14,7 @@ public:
 	// Hérité via IDrawable
 	void Start() override;
 	void Update(float deltaTime) override;
-	void Destroy(float deltaTime) override;
+	void Destroy() override;
 
 	void SetSize(const sf::Vector2f& size);
 	void SetFillColor(const sf::Color& color);

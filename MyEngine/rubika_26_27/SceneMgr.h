@@ -27,5 +27,5 @@ public:
 	virtual void DrawDebug() override;
 
 	void Update(float deltaTime);
-	void Draw(sf::RenderWindow window) const;
+	void Draw(sf::RenderWindow& window) const;
 };

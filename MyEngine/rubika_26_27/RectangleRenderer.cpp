@@ -17,7 +17,7 @@ void RectangleRenderer::Update(float deltaTime)
 {
 }
 
-void RectangleRenderer::Destroy(float deltaTime)
+void RectangleRenderer::Destroy()
 {
 }
 

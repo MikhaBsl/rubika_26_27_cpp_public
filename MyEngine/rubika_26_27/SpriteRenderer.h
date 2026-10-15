@@ -13,7 +13,7 @@ public:
 	// Hérité via IDrawable
 	void Start() override;
 	void Update(float deltaTime) override;
-	void Destroy(float deltaTime) override;
+	void Destroy() override;
 
 	void SetTexture();
 	void SetTextureRect();
