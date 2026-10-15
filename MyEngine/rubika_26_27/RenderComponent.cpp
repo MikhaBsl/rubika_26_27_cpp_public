@@ -37,8 +37,3 @@ void RenderComponent::Draw(sf::RenderWindow& window) const
 	if (Drawable)
 		Drawable->Draw(window);
 }
-
-IDrawable* RenderComponent::GetDrawable() const
-{
-	return Drawable.get();
-}
