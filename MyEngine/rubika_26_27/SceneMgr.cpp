@@ -31,9 +31,10 @@ Scene* SceneMgr::AddScene(Scene* scene)
 void SceneMgr::RemoveScene(const std::string& sceneName)
 {
 	auto it = scenes.find(sceneName);
-	if (currentScene == it->second) currentScene = nullptr;
 	if (it != scenes.end())
 	{
+		if (currentScene == it->second)
+			currentScene = nullptr;
 		it->second->Destroy();
 		delete it->second;
 		scenes.erase(it);
@@ -145,29 +146,14 @@ void SceneMgr::DrawDebug()
 					ImGui::EndPopup();
 				}
 
-				if (entity->GetComponent<TransformComponent>() != nullptr)
-					ImGui::BulletText("TransformComponent");
-
-				TransformComponent* transform = entity->GetComponent<TransformComponent>();
-				if (transform != nullptr && ImGui::TreeNode("Transform"))
+				for (const auto& component : entity->GetComponents())
 				{
-					float pos[2] = { transform->GetWorldPosition().x, transform->GetWorldPosition().y };
-					if (ImGui::DragFloat2("Position", pos))
-						transform->SetWorldPosition(sf::Vector2f(pos[0], pos[1]));
-
-					float rotation = transform->GetRotation();
-					if (ImGui::DragFloat("Rotation", &rotation))
-						transform->SetRotation(rotation);
-
-					float scale[2] = { transform->GetScale().x, transform->GetScale().y };
-					if (ImGui::DragFloat2("Scale", scale, 0.05f))
-						transform->SetScale(sf::Vector2f(scale[0], scale[1]));
-
-					ImGui::TreePop();
+					if (ImGui::TreeNode(component->GetName()))
+					{
+						component->DrawDebug();
+						ImGui::TreePop();
+					}
 				}
-
-				if (entity->GetComponent<RenderComponent>() != nullptr)
-					ImGui::BulletText("RenderComponent");
 
 				if (ImGui::Button("Remove Entity"))
 					entityToRemove = entity;

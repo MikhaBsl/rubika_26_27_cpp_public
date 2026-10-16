@@ -68,6 +68,8 @@ public:
 	std::map<std::string, TextureData> textures;
 	TextureData defaultTexture;
 
+	const std::map<std::string, TextureData>& GetTextures() const;
+
 	int LoadFolder(const std::filesystem::path& folder);
 
 

@@ -35,6 +35,10 @@ public:
 	void Update(float fDeltaTime) override;
 	void Destroy() override;
 
+	// Hérité via IComponent
+	const char* GetName() const override;
+	void DrawDebug() override;
+
 private:
 	sf::Transform Matrix;
 
@@ -45,4 +49,5 @@ private:
 	sf::Vector2f WorldPositionQuery;
 
 	void UpdateMatrix();
+
 };

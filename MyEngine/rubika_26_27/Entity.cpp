@@ -1,5 +1,6 @@
 #include "Entity.h"
 #include <RenderComponent.h>
+#include <TransformComponent.h>
 
 Entity::Entity(std::string friendlyName)
 {
@@ -33,6 +34,15 @@ void Entity::Destroy()
 void Entity::Draw(sf::RenderWindow& window) const
 {
 	RenderComponent* render = GetComponent<RenderComponent>();
-	if (render != nullptr)
-		render->Draw(window);
+	if (render == nullptr) return;
+
+	TransformComponent* transform = GetComponent<TransformComponent>();
+		if (transform != nullptr)
+			render->SetWorldTransform(transform->GetMatrix());
+	render->Draw(window);
+}
+
+const std::vector<std::unique_ptr<IComponent>>& Entity::GetComponents() const
+{
+	return components;
 }

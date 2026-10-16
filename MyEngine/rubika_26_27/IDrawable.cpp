@@ -28,7 +28,7 @@ void IDrawable::SetWorldTransform(const sf::Transform& transform)
 
 void IDrawable::Draw(sf::RenderWindow& window) const
 {
-	if (!Drawable)
+	if (!Drawable || !Visible )
 	{
 		return;
 	}

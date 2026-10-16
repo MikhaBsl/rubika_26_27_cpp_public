@@ -30,3 +30,13 @@ void RectangleRenderer::SetFillColor(const sf::Color& color)
 {
 	Shape.setFillColor(color);
 }
+
+sf::Vector2f RectangleRenderer::GetSize()
+{
+	return Shape.getSize();
+}
+
+sf::Color RectangleRenderer::GetFillColor()
+{
+	return Shape.getFillColor();
+}

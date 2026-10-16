@@ -34,6 +34,8 @@ public:
 	template <typename C>
 	C* GetComponent() const;
 
+	const std::vector<std::unique_ptr<IComponent>>& GetComponents() const;
+
 private:
 
 	std::vector<std::unique_ptr<IComponent>> components;

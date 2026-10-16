@@ -12,6 +12,10 @@ public:
 
 	virtual ~IComponent();
 
+	virtual const char* GetName() const = 0;
+
+	virtual void DrawDebug() = 0;
+
 	virtual void Start() = 0;
 
 	virtual void Update(float fDeltaTime) = 0;

@@ -15,6 +15,7 @@ public:
 	void Update(float deltaTime) override;
 	void Destroy() override;
 
-	void SetTexture();
-	void SetTextureRect();
+	void SetTexture(const sf::Texture& texture);
+	void SetTextureRect(const sf::IntRect& rect);
+	sf::Vector2f GetSize() const;
 };

@@ -98,6 +98,11 @@ TextureMgr::~TextureMgr()
 {
 }
 
+const std::map<std::string, TextureData>& TextureMgr::GetTextures() const
+{
+	return textures;
+}
+
 int TextureMgr::LoadFolder(const std::filesystem::path& folder)
 {
 	if (!std::filesystem::is_directory(folder))

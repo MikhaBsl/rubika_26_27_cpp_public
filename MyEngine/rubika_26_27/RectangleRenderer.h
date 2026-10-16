@@ -18,4 +18,7 @@ public:
 
 	void SetSize(const sf::Vector2f& size);
 	void SetFillColor(const sf::Color& color);
+
+	sf::Vector2f GetSize();
+	sf::Color GetFillColor();
 };

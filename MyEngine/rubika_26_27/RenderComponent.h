@@ -2,20 +2,23 @@
 #include <IComponent.h>
 #include <memory>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <vector>
+#include<IDrawable.h>
 
-class IDrawable;
 
 class RenderComponent : public IComponent
 {
 public:
 	RenderComponent(Entity& parent);
-	~RenderComponent();
+	~RenderComponent() override;
+
+	const char* GetName() const override;
+	void DrawDebug() override;
 
 	void Start() override;
 	void Update(float fDeltaTime) override;
 	void Destroy() override;
 
-	void SetDrawable(std::unique_ptr<IDrawable> drawable);
 	void Draw(sf::RenderWindow& window) const;
 
 	template <typename D>
@@ -24,9 +27,11 @@ public:
 	template<typename D>
 	D* GetDrawable() const;
 
+	void SetWorldTransform(const sf::Transform& transform);
 
 private:
-	std::unique_ptr<IDrawable> Drawable;
+	std::vector<std::unique_ptr<IDrawable>> Drawables;
+
 };
 
 #include "RenderComponent.hxx"

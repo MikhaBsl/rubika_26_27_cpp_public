@@ -252,6 +252,7 @@
     <ClInclude Include="Profiler.h" />
     <ClInclude Include="RectangleRenderer.h" />
     <ClInclude Include="RenderComponent.h" />
+    <ClInclude Include="RenderComponent.hxx" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneMgr.h" />
     <ClInclude Include="TextureMgr.h" />
