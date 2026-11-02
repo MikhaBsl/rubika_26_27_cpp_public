@@ -214,6 +214,11 @@ const TextureData& TextureMgr::GetTextureData(const std::string& name) const
 	return it->second;
 }
 
+bool TextureMgr::HasTexture(const std::string& name) const
+{
+	return textures.contains(name);
+}
+
 bool TextureMgr::CheckFilesExist(const std::filesystem::path& texturePath,
 	const std::filesystem::path& metadataPath) const
 {

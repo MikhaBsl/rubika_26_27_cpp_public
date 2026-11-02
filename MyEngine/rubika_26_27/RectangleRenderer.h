@@ -1,12 +1,13 @@
 #pragma once
 #include <IDrawable.h>
+#include <TextureMgr.h>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Color.hpp>
+#include <string>
 
 class RectangleRenderer : public IDrawable
 {
 public:
-	sf::RectangleShape Shape;
 
 	RectangleRenderer();
 	~RectangleRenderer();
@@ -16,9 +17,23 @@ public:
 	void Update(float deltaTime) override;
 	void Destroy() override;
 
-	void SetSize(const sf::Vector2f& size);
-	void SetFillColor(const sf::Color& color);
+	bool SetTexture(const std::string& textureName);
+	bool SetStaticTile(const std::string& staticTileName);
+	bool SetTextureAndStaticTile(const std::string& textureName, const std::string& staticTileName);
 
-	sf::Vector2f GetSize();
-	sf::Color GetFillColor();
+	void SetFillColor(const sf::Color& color);
+	sf::Color GetFillColor() const;
+	sf::Vector2f GetSize() const;
+
+	const std::string& GetCurrentTexture() const;
+	const std::string& GetCurrentTile() const;
+
+protected:
+	void ApplyTile();
+
+	sf::RectangleShape Shape;
+	std::string CurrentTexture;
+	std::string CurrentTile;
+
+	StaticTileData TileData;
 };

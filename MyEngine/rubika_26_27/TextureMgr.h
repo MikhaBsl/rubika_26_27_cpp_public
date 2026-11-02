@@ -87,6 +87,8 @@ public:
 	 */
 	const TextureData& GetTextureData(const std::string& name) const;
 
+	bool HasTexture(const std::string& name) const;
+
 	void DrawDebug() override;
 
 private:

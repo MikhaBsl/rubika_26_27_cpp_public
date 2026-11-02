@@ -27,6 +27,7 @@ void Scene::Destroy()
 {
 	for (Entity* entity : entities)
 	{
+		entity->Destroy();
 		delete entity;
 	}
 
@@ -42,6 +43,7 @@ Entity& Scene::AddEntity(Entity* entity)
 void Scene::RemoveEntity(Entity& entity)
 {
 	entities.erase(std::remove(entities.begin(), entities.end(), &entity), entities.end());
+	entity.Destroy();
 	delete& entity;
 }
 
