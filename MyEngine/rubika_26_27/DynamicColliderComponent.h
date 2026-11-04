@@ -4,6 +4,8 @@
 
 #include <SfML/Graphics/Rect.hpp>
 #include <functional>
+#include <TransformComponent.h>
+#include <SFML/Graphics/RectangleShape.hpp>
 
 enum class OnCollisionChoice
 {
@@ -30,4 +32,20 @@ public:
 	const sf::FloatRect& GetHitbox() const;
 
 	void SetOnCollisionCallback(std::function<OnCollisionChoice(const Entity*)> callback);
+
+	const char* GetName() const override;
+	void DrawDebug() override;
+
+	void Draw();
+
+private: 
+	sf::FloatRect Hitbox;
+	sf::Vector2f HitboxOffset;
+	bool bCollisionEnabled = true;
+	std::function<OnCollisionChoice(const Entity*)> OnCollisionCallback;
+
+	TransformComponent* Transform = nullptr;
+	void UpdateHitboxPosition();
+
+	sf::RectangleShape Rect;
 };

@@ -4,6 +4,7 @@
 #include <Globals.h>
 #include <TransformComponent.h>
 #include <RenderComponent.h>
+#include <DynamicColliderComponent.h>
 
 SceneMgr::SceneMgr()
 {
@@ -142,6 +143,9 @@ void SceneMgr::DrawDebug()
 
 					if (ImGui::MenuItem("RenderComponent"))
 						entity->AddComponent<RenderComponent>();
+
+					if (ImGui::MenuItem("DynamicColliderComponent"))
+						entity->AddComponent<DynamicColliderComponent>();
 
 					ImGui::EndPopup();
 				}

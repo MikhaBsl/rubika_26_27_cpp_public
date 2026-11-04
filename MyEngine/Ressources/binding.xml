@@ -1,0 +1,14 @@
+<Inputs>
+    <Actions>
+        <Action Name="Up" />
+        <Action Name="Down" />
+        <Action Name="Left" />
+        <Action Name="Right" />
+    </Actions>
+    <Bindings>
+        <Binding Action="Up" Type="Keyboard" Key="Z" />
+        <Binding Action="Down" Type="Keyboard" Key="S" />
+        <Binding Action="Left" Type="Keyboard" Key="Q" />
+        <Binding Action="Right" Type="Keyboard" Key="D" />
+    </Bindings>
+</Inputs>
