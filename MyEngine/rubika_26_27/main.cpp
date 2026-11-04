@@ -8,10 +8,13 @@
 #include <DebugMgr.h>
 #include <Scene.h>
 #include <Entity.h>
+#include <PlayerController.h>
 
 int main()
 {
     gData.Init();
+
+    // Input 
 
     sf::RenderWindow window(sf::VideoMode({ 1080, 720 }), "SFML works!", sf::State::Windowed);
 
@@ -24,13 +27,17 @@ int main()
     sf::Clock clock;
     clock.restart();
 
-    // Création en dur de la scene avec un rectangle 
-
     Scene* scene = new Scene("Main Scene");
-    scene->AddEntity(new Entity("Rect Entity"));
+    Entity* playerEntity = new Entity("Player");
+    scene->AddEntity(playerEntity);
+
+    TransformComponent* playerTransform = playerEntity->AddComponent<TransformComponent>();
 
     gData.SceneMgr->AddScene(scene);
     gData.SceneMgr->ChangeScene("Main Scene");
+
+    PlayerController player(playerTransform);
+    player.Init();
 
     while (window.isOpen())
     {
@@ -62,6 +69,7 @@ int main()
         PROFILER_EVENT_BEGIN(PROFILER_COLOR_RED, "Update");
 #ifdef _USE_IMGUI
         ImGui::SFML::Update(window, imGuiTime);
+
 #endif
 
         // sample
@@ -69,7 +77,8 @@ int main()
         //Logger::DrawLogger();
         gData.DebugMgr->Draw();
 
-        gData.SceneMgr->Update(fDeltaTimeS);
+		gData.Update(fDeltaTimeS);
+		player.Update(fDeltaTimeS);
 
         PROFILER_EVENT_END();
 

@@ -27,6 +27,13 @@ void Globals::Init()
 	TextureMgr->Init();
 }
 
+void Globals::Update(float deltaTime)
+{
+	SceneMgr->Update(deltaTime);
+	InputMgr->Update(deltaTime);
+}
+
+
 void Globals::Shut()
 {
 	InputMgr->Shut();

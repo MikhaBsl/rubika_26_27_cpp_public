@@ -51,3 +51,8 @@ float InputAction::GetValue() const
 {
 	return Value;
 }
+
+const std::vector<InputAction::sCallbackInfo>& InputAction::GetCallbacks() const
+{
+	return Callbacks;
+}

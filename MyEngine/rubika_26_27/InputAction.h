@@ -13,11 +13,6 @@ public:
 	void RegisterCallback(const std::string& debugName, std::function<void(float)> callback, void* owner);
 	void UnregisterCallbacks(void* owner);
 
-	std::string GetName() const;
-	std::size_t GetNameHash() const;
-	float GetValue() const;
-
-private:
 	struct sCallbackInfo
 	{
 		std::string DebugName;
@@ -25,6 +20,13 @@ private:
 		void* Owner = nullptr;
 	};
 
+	std::string GetName() const;
+	std::size_t GetNameHash() const;
+	float GetValue() const;
+
+	const std::vector<InputAction::sCallbackInfo>& GetCallbacks() const;
+
+private:
 	std::string ActionName;
 	std::size_t ActionNameHash;
 	float Value = 0.f;
