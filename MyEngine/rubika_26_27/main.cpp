@@ -9,6 +9,7 @@
 #include <Scene.h>
 #include <Entity.h>
 #include <PlayerController.h>
+#include <Player.h>
 
 int main()
 {
@@ -28,16 +29,13 @@ int main()
     clock.restart();
 
     Scene* scene = new Scene("Main Scene");
-    Entity* playerEntity = new Entity("Player");
+    Entity* playerEntity = new Player();
     scene->AddEntity(playerEntity);
-
-    TransformComponent* playerTransform = playerEntity->AddComponent<TransformComponent>();
 
     gData.SceneMgr->AddScene(scene);
     gData.SceneMgr->ChangeScene("Main Scene");
 
-    PlayerController player(playerTransform);
-    player.Init();
+    gData.TextureMgr->LoadFolder(gData.TextureMgr->GetFolderPath());
 
     while (window.isOpen())
     {
@@ -78,7 +76,6 @@ int main()
         gData.DebugMgr->Draw();
 
 		gData.Update(fDeltaTimeS);
-		player.Update(fDeltaTimeS);
 
         PROFILER_EVENT_END();
 

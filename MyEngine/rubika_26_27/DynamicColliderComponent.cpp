@@ -2,6 +2,7 @@
 #include "Entity.h"
 #include "TransformComponent.h"
 #include <Imgui/imgui.h>
+#include <Globals.h>
 
 DynamicColliderComponent::DynamicColliderComponent(Entity& entity) : IComponent(entity)
 {
@@ -63,7 +64,6 @@ const char* DynamicColliderComponent::GetName() const
 void DynamicColliderComponent::DrawDebug()
 {
 #ifdef _USE_IMGUI
-	ImColor color = ImColor(0,255,0,255);
 
 
 	float size[2] = { Hitbox.size.x, Hitbox.size.y };
@@ -80,13 +80,23 @@ void DynamicColliderComponent::DrawDebug()
 
 	ImGui::Text("Position: %.1f, %.1f", Hitbox.position.x, Hitbox.position.y);
 
+	if(gData.DrawDebugColliders)
+		Draw();
+
+#endif // _USE_IMGUI
+}
+
+void DynamicColliderComponent::Draw() const
+{
+#ifdef _USE_IMGUI
+	ImColor color = ImColor(0, 255, 0, 255);
 	ImDrawList* draw_list = ImGui::GetForegroundDrawList();
 
 	ImVec2 p_min = ImVec2(Hitbox.position.x, Hitbox.position.y);
 	ImVec2 p_max = ImVec2(Hitbox.position.x + Hitbox.size.x, Hitbox.position.y + Hitbox.size.y);
 
 	draw_list->AddRect(p_min, p_max, color, 0.0f, 0, 2.0f);
-#endif // _USE_IMGUI
+#endif
 }
 
 void DynamicColliderComponent::UpdateHitboxPosition()
@@ -97,7 +107,9 @@ void DynamicColliderComponent::UpdateHitboxPosition()
 	}
 
 	if (Transform != nullptr)
+	{
 		Hitbox.position = Transform->GetWorldPosition() + HitboxOffset;
+	}
 	else
 		Hitbox.position = HitboxOffset;
 }

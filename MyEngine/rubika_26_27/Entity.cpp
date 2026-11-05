@@ -1,5 +1,6 @@
 #include "Entity.h"
 #include <RenderComponent.h>
+#include <DynamicColliderComponent.h>
 
 Entity::Entity(std::string friendlyName)
 {

@@ -3,6 +3,7 @@
 #ifdef _USE_IMGUI
 #include <Imgui/imgui.h>
 #endif
+#include <Globals.h>
 
 void DebugMgr::Draw()
 {
@@ -20,7 +21,7 @@ void DebugMgr::Draw()
 						data.Callback(data.UserData);
 					}
 				}
-
+				ImGui::Checkbox("Draw Colliders", &gData.DrawDebugColliders);
 				ImGui::EndTabItem();
 			}
 

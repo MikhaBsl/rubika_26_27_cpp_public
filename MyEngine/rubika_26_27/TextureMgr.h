@@ -91,6 +91,8 @@ public:
 
 	void DrawDebug() override;
 
+	std::string GetFolderPath() const;
+
 private:
 	char rootFolder[256] = R"(D:\Rubika\Cours\CPP Natif\rubika_26_27_cpp_public\MyEngine\Ressources)";
 

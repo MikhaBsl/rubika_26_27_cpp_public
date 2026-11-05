@@ -14,6 +14,7 @@ PlayerController::~PlayerController()
 	gData.InputMgr->UnregisterFromAction("Down", this);
 	gData.InputMgr->UnregisterFromAction("Left", this);
 	gData.InputMgr->UnregisterFromAction("Right", this);
+	gData.InputMgr->UnregisterFromAction("Debug", this);
 }
 
 void PlayerController::Init()
@@ -32,6 +33,10 @@ void PlayerController::Init()
 	gData.InputMgr->RegisterToAction("Down", "Player Down", [this](float v) { OnDown(v); }, this);
 	gData.InputMgr->RegisterToAction("Left", "Player Left", [this](float v) { OnLeft(v); }, this);
 	gData.InputMgr->RegisterToAction("Right", "Player Right", [this](float v) { OnRight(v); }, this);
+
+	gData.InputMgr->CreateAction("Debug");
+	gData.InputMgr->SetActionKey("Debug", sf::Keyboard::Key::A);
+	gData.InputMgr->RegisterToAction("Debug", "Player Debug", [this](float v) { OnDebug(v); }, this);
 }
 
 void PlayerController::Update(float deltaTime)
@@ -50,3 +55,4 @@ void PlayerController::OnUp(float value) { MoveDir.y = -value; }
 void PlayerController::OnDown(float value) { MoveDir.y = value; }
 void PlayerController::OnLeft(float value) { MoveDir.x = -value; }
 void PlayerController::OnRight(float value) { MoveDir.x = value; }
+void PlayerController::OnDebug(float value) { if(value > 0) gData.DrawDebugColliders = !gData.DrawDebugColliders; }

@@ -6,6 +6,7 @@
 #include <functional>
 #include <TransformComponent.h>
 #include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics.hpp>
 
 enum class OnCollisionChoice
 {
@@ -36,7 +37,7 @@ public:
 	const char* GetName() const override;
 	void DrawDebug() override;
 
-	void Draw();
+	void Draw() const;
 
 private: 
 	sf::FloatRect Hitbox;
@@ -47,5 +48,5 @@ private:
 	TransformComponent* Transform = nullptr;
 	void UpdateHitboxPosition();
 
-	sf::RectangleShape Rect;
+	sf::RectangleShape RectDebug;
 };

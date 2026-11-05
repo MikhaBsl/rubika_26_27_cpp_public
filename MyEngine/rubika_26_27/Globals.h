@@ -26,6 +26,8 @@ public:
 	SceneMgr* SceneMgr;
 	TextureMgr* TextureMgr;
 	InputMgr* InputMgr;
+
+	bool DrawDebugColliders = true;
 };
 
 extern Globals gData;

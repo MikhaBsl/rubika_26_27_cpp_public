@@ -15,6 +15,8 @@ private:
 	void OnLeft(float value);
 	void OnRight(float value);
 
+	void OnDebug(float value);
+
 	TransformComponent* Transform;
 	sf::Vector2f MoveDir;
 	float Speed = 200.f;

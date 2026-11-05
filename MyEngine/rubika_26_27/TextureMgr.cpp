@@ -278,6 +278,7 @@ void TextureMgr::DrawDebug()
 #ifdef _USE_IMGUI
 	ImGui::InputText("Root folder", rootFolder, sizeof(rootFolder));
 	ImGui::SameLine();
+
 	if (ImGui::Button("Load folder"))
 		LoadFolder(rootFolder);
 
@@ -305,6 +306,11 @@ void TextureMgr::DrawDebug()
 		ImGui::EndTabBar();
 	}
 #endif
+}
+
+std::string TextureMgr::GetFolderPath() const
+{
+	return std::string(rootFolder);
 }
 
 TextureData::TextureData()
