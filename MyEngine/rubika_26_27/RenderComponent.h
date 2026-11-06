@@ -38,6 +38,8 @@ public:
 	void SetDrawableRelativeRotation(const IDrawable* drawable, float rotation);
 	void SetDrawableRelativeScale(const IDrawable* drawable, const sf::Vector2f& scale);
 
+	sf::FloatRect GetLocalBounds() const;
+
 protected:
 
 	struct DrawableInfo

@@ -10,6 +10,7 @@
 #include <Entity.h>
 #include <PlayerController.h>
 #include <Player.h>
+#include "Obstacle.h"
 
 int main()
 {
@@ -28,6 +29,8 @@ int main()
     sf::Clock clock;
     clock.restart();
 
+    gData.TextureMgr->LoadFolder(gData.TextureMgr->GetFolderPath());
+    
     Scene* scene = new Scene("Main Scene");
     Entity* playerEntity = new Player();
     scene->AddEntity(playerEntity);
@@ -35,7 +38,10 @@ int main()
     gData.SceneMgr->AddScene(scene);
     gData.SceneMgr->ChangeScene("Main Scene");
 
-    gData.TextureMgr->LoadFolder(gData.TextureMgr->GetFolderPath());
+    Entity* obstacle = new Obstacle("Basement","Ground_Line_Mid_1");
+    obstacle->GetComponent<TransformComponent>()->SetWorldPosition(sf::Vector2f(50.f,50.f));
+    scene->AddEntity(obstacle);
+
 
     while (window.isOpen())
     {

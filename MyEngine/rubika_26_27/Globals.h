@@ -2,6 +2,7 @@
 #include <SceneMgr.h>
 #include <TextureMgr.h>
 #include <InputMgr.h>
+#include <CollisionMgr.h>
 
 class DebugMgr;
 class Logger;
@@ -26,6 +27,7 @@ public:
 	SceneMgr* SceneMgr;
 	TextureMgr* TextureMgr;
 	InputMgr* InputMgr;
+	CollisionMgr* CollisionMgr;
 
 	bool DrawDebugColliders = true;
 };

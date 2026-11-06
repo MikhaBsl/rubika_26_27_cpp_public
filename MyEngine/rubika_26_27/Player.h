@@ -1,6 +1,7 @@
 #pragma once
 #include "Entity.h"
 #include <PlayerController.h>
+#include <DynamicColliderComponent.h>
 
 class Player : public Entity
 {
@@ -13,6 +14,9 @@ public :
 	void Destroy() override;
 
 	void DrawPlayer() const;
+
+	OnCollisionChoice OnCollision(const Entity* other) const;
+
 private:
 	PlayerController* controller = nullptr;
 };

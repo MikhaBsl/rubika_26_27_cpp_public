@@ -39,6 +39,9 @@ public:
 
 	void Draw() const;
 
+	OnCollisionChoice OnCollision(const Entity* other) const;
+
+	void UpdateHitboxPosition();
 private: 
 	sf::FloatRect Hitbox;
 	sf::Vector2f HitboxOffset;
@@ -46,7 +49,6 @@ private:
 	std::function<OnCollisionChoice(const Entity*)> OnCollisionCallback;
 
 	TransformComponent* Transform = nullptr;
-	void UpdateHitboxPosition();
 
 	sf::RectangleShape RectDebug;
 };

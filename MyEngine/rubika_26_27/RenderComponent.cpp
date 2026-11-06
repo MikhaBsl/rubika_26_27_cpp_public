@@ -101,6 +101,35 @@ void RenderComponent::SetDrawableRelativeScale(const IDrawable* drawable, const 
 	}
 }
 
+sf::FloatRect RenderComponent::GetLocalBounds() const
+{
+	bool first = true;
+	sf::Vector2f minPos;
+	sf::Vector2f maxPos;
+
+	for (const DrawableInfo& info : Drawables)
+	{
+		sf::Vector2f size = info.Drawable->GetSize();
+		sf::Vector2f topLeft = info.RelativePosition;
+		sf::Vector2f bottomRight = topLeft + size;
+
+		if (first)
+		{
+			minPos = topLeft;
+			maxPos = bottomRight;
+			first = false;
+			continue;
+		}
+
+		minPos.x = std::min(minPos.x, topLeft.x);
+		minPos.y = std::min(minPos.y, topLeft.y);
+		maxPos.x = std::max(maxPos.x, bottomRight.x);
+		maxPos.y = std::max(maxPos.y, bottomRight.y);
+	}
+
+	return sf::FloatRect(minPos, maxPos - minPos);
+}
+
 RenderComponent::DrawableInfo::DrawableInfo()
 {
 	FriendlyName = "";

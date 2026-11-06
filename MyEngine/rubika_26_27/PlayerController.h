@@ -8,6 +8,7 @@ public:
 
 	void Init();
 	void Update(float deltaTime);
+	void Destroy();
 
 private:
 	void OnUp(float value);

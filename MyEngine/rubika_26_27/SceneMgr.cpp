@@ -201,3 +201,8 @@ void SceneMgr::Draw(sf::RenderWindow& window) const
 	if (currentScene != nullptr)
 		currentScene->Draw(window);
 }
+
+Scene* SceneMgr::GetCurrentScene() const
+{
+	return currentScene;
+}

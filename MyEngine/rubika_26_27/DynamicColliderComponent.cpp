@@ -99,6 +99,11 @@ void DynamicColliderComponent::Draw() const
 #endif
 }
 
+OnCollisionChoice DynamicColliderComponent::OnCollision(const Entity* other) const
+{
+	return OnCollisionCallback ? OnCollisionCallback(other) : OnCollisionChoice::Ignore;
+}
+
 void DynamicColliderComponent::UpdateHitboxPosition()
 {
 	if (Transform == nullptr)

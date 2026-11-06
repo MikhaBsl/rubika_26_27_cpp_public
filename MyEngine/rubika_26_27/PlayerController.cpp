@@ -51,6 +51,11 @@ void PlayerController::Update(float deltaTime)
 	Transform->SetWorldPosition(Transform->GetWorldPosition() + direction * Speed * deltaTime);
 }
 
+void PlayerController::Destroy()
+{
+	
+}
+
 void PlayerController::OnUp(float value) { MoveDir.y = -value; }
 void PlayerController::OnDown(float value) { MoveDir.y = value; }
 void PlayerController::OnLeft(float value) { MoveDir.x = -value; }

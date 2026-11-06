@@ -1,6 +1,7 @@
 #include "Entity.h"
 #include <RenderComponent.h>
 #include <DynamicColliderComponent.h>
+#include <Globals.h>
 
 Entity::Entity(std::string friendlyName)
 {
@@ -20,7 +21,9 @@ void Entity::Start()
 void Entity::Update(float fDeltaTime)
 {
 	for (auto& component : components)
+	{
 		component->Update(fDeltaTime);
+	}
 }
 
 void Entity::Destroy()

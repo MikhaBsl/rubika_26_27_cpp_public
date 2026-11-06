@@ -22,6 +22,8 @@ public:
 
 	void Draw(sf::RenderWindow& window) const;
 
+	virtual sf::Vector2f GetSize() const = 0;
+
 protected:
 	bool Visible;
 	sf::Transform WorldTransform;

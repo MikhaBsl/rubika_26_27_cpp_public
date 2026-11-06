@@ -12,6 +12,7 @@ Globals::Globals() : FrameCount(0)
 	Logger = new ::Logger();
 	SceneMgr = new::SceneMgr();
 	TextureMgr = new::TextureMgr();
+	CollisionMgr = new::CollisionMgr();
 }
 
 Globals::~Globals()
@@ -31,6 +32,7 @@ void Globals::Update(float deltaTime)
 {
 	SceneMgr->Update(deltaTime);
 	InputMgr->Update(deltaTime);
+	CollisionMgr->Update(deltaTime);
 }
 
 
